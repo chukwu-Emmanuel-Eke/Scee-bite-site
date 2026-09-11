@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SceeBite Admin Dashboard</title>
+    <style>
+        body 
+        {    font-family: Arial, sans-serif;
+             padding: 20px; 
+             background: #f4f4f9; 
+             color: #333; 
+        }
+        .container 
+        {
+             max-width: 1100px;
+              margin: auto; 
+              background: white; 
+              padding: 25px; 
+              border-radius: 8px; 
+              box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+        }
+
+        h2, h3 
+        { color: #1e293b; 
+            margin-top: 0; 
+        }
+
+        .form-card 
+        { background: #f8fafc; 
+            padding: 20px; 
+            border-radius: 6px; 
+            margin-bottom: 25px; 
+            border: 1px solid #e2e8f0; 
+        }
+
+        .form-grid
+         { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 12px; 
+            margin-top: 10px; 
+        }
+
+        input, select {
+             width: 100%; 
+             padding: 8px 10px; 
+             border: 1px solid #cbd5e1; 
+             border-radius: 4px; 
+             box-sizing: border-box;
+             }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+
+        th, td
+         {
+             padding: 12px; 
+             border-bottom: 1px solid #e2e8f0; 
+             text-align: left; 
+             vertical-align: middle; 
+         }
+        th 
+        { background: #f1f5f9; 
+            font-weight: 600;
+         }
+        .img-preview 
+        { width: 50px; 
+            height: 50px; 
+            object-fit: cover; 
+            border-radius: 4px; 
+            border: 1px solid #ddd; 
+        }
+        .btn 
+        { 
+            border: none; 
+            padding: 8px 14px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            color: white; 
+            font-weight: bold; 
+        }
+        .btn-add 
+        { background: #2563eb; 
+            width: 100%; 
+            margin-top: 12px; 
+        }
+        .btn-add:hover 
+        { background: #1d4ed8; 
+        }
+        .btn-save 
+        { background: #059669;
+         }
+        .btn-save:hover
+         { 
+            background: #047857; 
+        }
+        .btn-delete 
+        { 
+            background: #dc2626; 
+            margin-left: 5px; }
+
+        .btn-delete:hover { 
+            background: #b91c1c;
+         }
+
+        .file-label 
+        { font-size: 12px; 
+          color: #64748b;
+          display: block;
+          margin-bottom: 4px;
+         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>SceeBite Menu Management Dashboard</h2>
+
+        <!-- ADD NEW PRODUCT FORM -->
+        <div class="form-card">
+            <h3>Add New Snack Item</h3>
+            <form id="add-product-form" onsubmit="handleAddProduct(event)">
+                <div class="form-grid">
+                    <div>
+                        <span class="file-label">Item Name</span>
+                        <input type="text" id="new-name" placeholder="e.g. Classic Vanilla" required>
+                    </div>
+                    <div>
+                        <span class="file-label">Category</span>
+                        <select id="new-category" required>
+                            <option value="sweet">sweet</option>
+                            <option value="spicy">spicy</option>
+                            <option value="savory">savory</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="file-label">Price (₦)</span>
+                        <input type="number" id="new-price" placeholder="4500" required>
+                    </div>
+                    <div>
+                        <span class="file-label">Product Image</span>
+                        <input type="file" id="new-image-file" accept="image/*" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-add">+ Add Item to Menu</button>
+            </form>
+        </div>
+
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>Preview</th>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Price (₦)</th>
+                    <th>Replace Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="product-list">
+                <!-- Products loaded dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        
+        async function loadProducts() {
+            try {
+                const res = await fetch('/api/products');
+                const products = await res.json();
+                const tbody = document.getElementById('product-list');
+                tbody.innerHTML = '';
+
+                if (!Array.isArray(products)) {
+                    console.error('Expected array of products:', products);
+                    return;
+                }
+
+                products.forEach(p => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>
+                                <img src="${p.image_url}" class="img-preview" alt="${p.name}" onerror="this.src='https://via.placeholder.com/50?text=No+Img'">
+                            </td>
+                            <td><input type="text" id="name-${p.id}" value="${p.name}"></td>
+                            <td>
+                                <select id="cat-${p.id}">
+                                    <option value="sweet" ${p.category === 'sweet' ? 'selected' : ''}>sweet</option>
+                                    <option value="spicy" ${p.category === 'spicy' ? 'selected' : ''}>spicy</option>
+                                    <option value="savory" ${p.category === 'savory' ? 'selected' : ''}>savory</option>
+                                </select>
+                            </td>
+                            <td><input type="number" id="price-${p.id}" value="${p.price}"></td>
+                            <td>
+                                <input type="file" id="img-file-${p.id}" accept="image/*">
+                            </td>
+                            <td>
+                                <button class="btn btn-save" onclick="updateProduct(${p.id}, '${p.image_url}')">Save</button>
+                                <button class="btn btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error('Failed to load products:', err);
+            }
+        }
+
+        // Add product with image upload
+        async function handleAddProduct(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('new-name').value);
+            formData.append('category', document.getElementById('new-category').value);
+            formData.append('price', document.getElementById('new-price').value);
+            formData.append('image', document.getElementById('new-image-file').files[0]);
+
+            try {
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    document.getElementById('add-product-form').reset();
+                    loadProducts();
+                } else {
+                    alert('Failed to add product');
+                }
+            } catch (err) {
+                console.error('Error adding product:', err);
+            }
+        }
+
+        // Update product details or upload a replacement image
+        async function updateProduct(id, currentImageUrl) {
+            const formData = new FormData();
+            formData.append('name', document.getElementById(`name-${id}`).value);
+            formData.append('category', document.getElementById(`cat-${id}`).value);
+            formData.append('price', document.getElementById(`price-${id}`).value);
+            formData.append('existing_image_url', currentImageUrl);
+
+            const fileInput = document.getElementById(`img-file-${id}`);
+            if (fileInput.files.length > 0) {
+                formData.append('image', fileInput.files[0]);
+            }
+
+            try {
+                const res = await fetch(`/api/products/${id}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    alert('Product updated successfully!');
+                    loadProducts();
+                } else {
+                    alert('Failed to update product');
+                }
+            } catch (err) {
+                console.error('Error updating product:', err);
+            }
+        }
+
+        // Delete product item
+        async function deleteProduct(id) {
+            if (confirm('Are you sure you want to remove this item from the database?')) {
+                try {
+                    const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        loadProducts();
+                    } else {
+                        alert('Failed to delete product');
+                    }
+                } catch (err) {
+                    console.error('Error deleting product:', err);
+                }
+            }
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>
