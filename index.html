@@ -1,0 +1,184 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SceeBite | Premium Handcrafted Chin Chin</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                Scee<span>Bite</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#flavors">Flavors</a></li>
+                <li><a href="#why-us">Why SceeBite</a></li>
+                <li><a href="#order">Order Estimator</a></li>
+            </ul>
+            <div class="ham">&#9776;</div>
+            <a href="#order" class="btn btn-primary" id="adjust">Order Now</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-grid">
+            <div>
+                <span class="badge">✨ Handcrafted Nigerian Snacks</span>
+                <h1 class="hero-title">
+                    Golden, Crunchy, <br>
+                    <span class="italic-text">Unapologetically</span> Delicious.
+                </h1>
+                <p class="hero-description">
+                    Gourmet Chin Chin made with rich dairy, real butter, and authentic spices. Batch-fried to perfection for that signature snap in every bite.
+                </p>
+                <div class="hero-actions">
+                    <a href="#order" class="btn btn-primary">Build Your Snack Box</a>
+                    <a href="#flavors" class="btn btn-outline">Explore Flavors</a>
+                </div>
+            </div>
+
+            <div class="hero-visual-wrapper">
+                <div class="floating-badge">
+                    <span style="font-size: 1.8rem;">🍿</span>
+                    <div>
+                        <p style="font-size: 0.7rem; font-weight: 800; color: #78716C; text-transform: uppercase;">Batch Fresh</p>
+                        <p style="font-size: 0.85rem; font-weight: 800; color: var(--color-dark);">100% Natural Ingredients</p>
+                    </div>
+                </div>
+
+                <div class="hero-card-visual">
+                    <div class="hero-emoji">🥨</div>
+                    <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.25rem;">Fresh Batch Ready</h3>
+                    <p style="font-size: 0.85rem; color: #78350F; max-width: 240px;">Sealed tightly to maintain optimal crispness from our kitchen to your hands.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="flavors" class="flavors-section">
+        <div class="section-header">
+            <h2>Explore Our Flavors</h2>
+            <p>Handcrafted varieties tailored to match your exact snacking mood.</p>
+        </div>
+
+        <div class="tab-controls">
+            <button class="tab-btn active" onclick="filterFlavors('all', this)">All</button>
+            <button class="tab-btn" onclick="filterFlavors('sweet', this)">Sweet</button>
+            <button class="tab-btn" onclick="filterFlavors('spicy', this)">Spicy</button>
+        </div>
+
+        <div class="flavors-grid">
+            <div class="flavor-card sweet">
+                <div class="flavor-icon"></div>
+                <h3>Classic Chin chin</h3>
+                <p>Aromatic nutmeg with smooth vanilla notes for a rich traditional taste.</p>
+                <span class="tag">Sweet • Extra Crispy</span>
+            </div>
+
+            <div class="flavor-card spicy">
+                <div class="flavor-icon" style="background-color: var(--color-red-bg);"></div>
+                <h3>Spicy Peppered</h3>
+                <p>Bold scotch bonnet kick balanced with fragrant savory herbs.</p>
+                <span class="tag tag-spicy">Spicy • Deep Crunch</span>
+            </div>
+
+            <div class="flavor-card sweet">
+                <div class="flavor-icon"></div>
+                <h3>Coconut Crisp</h3>
+                <p>Infused with real toasted coconut flakes folded directly into the dough.</p>
+                <span class="tag">Sweet • Flaky & Light</span>
+            </div>
+
+            <div class="flavor-card sweet">
+                <div class="flavor-icon">🥛</div>
+                <h3>Milky Gourmet</h3>
+                <p>Extra dairy blend offering a melt-in-your-mouth buttery finish.</p>
+                <span class="tag">Sweet • Rich Crunch</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-us" class="features-section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"></div>
+                <h3>Real Butter & Milk</h3>
+                <p>Zero artificial fillers or margarine. Made exclusively with high-quality dairy ingredients.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"></div>
+                <h3>The Signature Snap</h3>
+                <p>Fried at precise temperatures to deliver an addictively crisp, non-greasy bite every single time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"></div>
+                <h3>Resealable Pouches</h3>
+                <p>Air-tight packaging locks moisture out to preserve maximum freshness for weeks.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="order" class="order-section">
+        <div class="estimator-card">
+            <div class="section-header" style="margin-bottom: 1.5rem;">
+                <h2>Build Your Order</h2>
+                <p>Select flavors and pack sizes to add items to your cart.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="flavor-select">Select Flavor</label>
+                <select id="flavor-select" class="form-select">
+                    <option value="Classic Vanilla">Classic Vanilla</option>
+                    <option value="Spicy Peppered">Spicy Peppered</option>
+                    <option value="Coconut Crisp">Coconut Crisp</option>
+                    <option value="Milky Gourmet">Milky Gourmet</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pack-size">Select Size</label>
+                <select id="pack-size" class="form-select">
+                    <option value="1500" data-size="Mini Pack (150g)">Mini Pack (150g) — ₦1,500</option>
+                    <option value="4500" data-size="Standard Tub (500g)" selected>Standard Tub (500g) — ₦4,500</option>
+                    <option value="8500" data-size="Party Bucket (1kg)">Party Bucket (1kg) — ₦8,500</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity</label>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                    <span id="qty-display" class="qty-number">1</span>
+                    <button class="qty-btn" onclick="updateQty(1)">+</button>
+                </div>
+            </div>
+
+            <button class="btn btn-outline" style="width: 100%; margin-bottom: 1.5rem;" onclick="addToCart()">+ Add Item to Cart</button>
+
+            <div id="cart-container" style="margin-bottom: 1.5rem; display: none;">
+                <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">Your Cart Items:</label>
+                <ul id="cart-list" style="list-style: none; padding: 0;"></ul>
+            </div>
+
+            <div class="price-summary">
+                <span>Grand Total:</span>
+                <span id="total-amount" class="total-amount">₦0</span>
+            </div>
+
+            <button class="btn btn-whatsapp" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 SceeBite. Crafted for the culture, baked for the soul.</p>
+    </footer>
+    <script src="index.js"></script>
+</body>
+</html>
