@@ -1,4 +1,4 @@
- const ham = document.querySelector('.ham');
+  const ham = document.querySelector('.ham');
         const links = document.querySelector('.nav-links');
 
         ham.addEventListener('click', function() {
@@ -11,6 +11,38 @@
                 links.classList.remove('show');
             });
         });
+        document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("menu-container");
+
+  fetch("/api/products")
+    .then((response) => response.json())
+    .then((products) => {
+      container.innerHTML = ""; 
+
+      if (products.length === 0) {
+        container.innerHTML = "<p>No items available right now.</p>";
+        return;
+      }
+
+      products.forEach((item) => {
+        const productCard = document.createElement("div");
+        productCard.classList.add("product-card");
+
+        productCard.innerHTML = `
+          <img src="${item.image_url || 'placeholder.jpg'}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p class="category">${item.category}</p>
+          <p class="price">₦${item.price}</p>
+        `;
+
+        container.appendChild(productCard);
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading products:", error);
+      container.innerHTML = "<p>Failed to load menu items.</p>";
+    });
+});
 
         let currentQty = 1;
         let cart = [];
