@@ -503,3 +503,32 @@ footer {
         display: none;
     }
 }
+/* Force Grid Layout for Dynamic Menu Container */
+#menu-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Force Image Sizing for Injected Cards */
+#menu-container img,
+.product-card img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
+    display: block !important;
+}
+
+/* Ensure individual item containers don't stretch full screen */
+#menu-container > div {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1px solid rgba(217, 119, 6, 0.15);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
