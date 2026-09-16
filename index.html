@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SceeBite | Premium Handcrafted Chin Chin</title>
+    <title>SceeBite || Premium Handcrafted Chin Chin</title>
     <link rel="stylesheet" href="index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -83,14 +83,10 @@
         </div>
     </section>
 
-            <section class="menu-section">
-
-                <h2>Our Menu</h2>
-            
-               <div id="menu-container"></div>
-            </section>
-
-
+    <section id="our-product" class="menu-section">
+        <h2>Our Menu</h2>
+        <div id="menu-container"></div>
+    </section>
 
     <section id="order" class="order-section">
         <div class="estimator-card">
@@ -102,19 +98,16 @@
             <div class="form-group">
                 <label for="flavor-select">Select Flavor</label>
                 <select id="flavor-select" class="form-select">
-                    <option value="Classic Vanilla">Classic Vanilla</option>
-                    <option value="Spicy Peppered">Spicy Peppered</option>
-                    <option value="Coconut Crisp">Coconut Crisp</option>
-                    <option value="Milky Gourmet">Milky Gourmet</option>
+                    <option value="">Loading flavors from database...</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="pack-size">Select Size</label>
-                <select id="pack-size" class="form-select">
-                    <option value="1500" data-size="Mini Pack (150g)">Mini Pack (150g) — ₦1,500</option>
-                    <option value="4500" data-size="Standard Tub (500g)" selected>Standard Tub (500g) — ₦4,500</option>
-                    <option value="8500" data-size="Party Bucket (1kg)">Party Bucket (1kg) — ₦8,500</option>
+                <select id="pack-size" class="form-select" onchange="updateEstimatedPrice()">
+                    <option value="0.33" data-size="Mini Pack (150g)">Mini Pack (150g)</option>
+                    <option value="1.0" data-size="Standard Tub (500g)" selected>Standard Tub (500g)</option>
+                    <option value="2.0" data-size="Party Bucket (1kg)">Party Bucket (1kg)</option>
                 </select>
             </div>
 
@@ -146,6 +139,7 @@
     <footer>
         <p>© 2026 SceeBite. Crafted for the culture, baked for the soul.</p>
     </footer>
+
     <script src="index.js"></script>
 </body>
 </html>
