@@ -1,29 +1,24 @@
-  
+  // Navigation Toggle
 const ham = document.querySelector('.ham');
 const links = document.querySelector('.nav-links');
 
 if (ham && links) {
-    ham.addEventListener('click', function() {
-        links.classList.toggle('show');
-    });
-
+    ham.addEventListener('click', () => links.classList.toggle('show'));
     document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            links.classList.remove('show');
-        });
+        link.addEventListener('click', () => links.classList.remove('show'));
     });
 }
 
-
+// Global state
 let currentQty = 1;
 let cart = [];
 let databaseProducts = [];
-
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDatabaseProducts();
 });
 
+// Fetch products from database API & populate UI
 async function loadDatabaseProducts() {
     const container = document.getElementById("menu-container");
     const flavorSelect = document.getElementById("flavor-select");
@@ -41,11 +36,10 @@ async function loadDatabaseProducts() {
                 databaseProducts.forEach((item) => {
                     const productCard = document.createElement("div");
                     productCard.classList.add("product-card");
-
                     productCard.innerHTML = `
                         <img src="${item.image_url || 'placeholder.jpg'}" alt="${item.name}">
                         <h3>${item.name}</h3>
-                        <p class="category">${item.category}</p>
+                        <p class="category">${item.category || 'Gourmet'}</p>
                         <p class="price">₦${Number(item.price).toLocaleString()}</p>
                     `;
                     container.appendChild(productCard);
@@ -53,7 +47,7 @@ async function loadDatabaseProducts() {
             }
         }
 
-        
+        // 2. Populate Dropdown with database items and base prices
         if (flavorSelect) {
             flavorSelect.innerHTML = "";
             if (databaseProducts.length === 0) {
@@ -62,12 +56,15 @@ async function loadDatabaseProducts() {
                 databaseProducts.forEach((item, index) => {
                     const option = document.createElement("option");
                     option.value = item.name;
-                    option.dataset.basePrice = item.price; // Store base price in data attribute
+                    option.dataset.basePrice = item.price; // Dynamic database price
                     option.textContent = `${item.name} (Base: ₦${Number(item.price).toLocaleString()})`;
                     
                     if (index === 0) option.selected = true;
                     flavorSelect.appendChild(option);
                 });
+
+                flavorSelect.addEventListener("change", updateEstimatedPrice);
+                updateEstimatedPrice();
             }
         }
     } catch (error) {
@@ -76,30 +73,48 @@ async function loadDatabaseProducts() {
     }
 }
 
+// Recalculate preview total based on Database Base Price * Pack Multiplier * Qty
+function updateEstimatedPrice() {
+    const flavorSelect = document.getElementById("flavor-select");
+    const packSelect = document.getElementById("pack-size");
+    const totalDisplay = document.getElementById("total-amount");
+
+    if (!flavorSelect || flavorSelect.options.length === 0 || cart.length > 0) return;
+
+    const selectedOpt = flavorSelect.options[flavorSelect.selectedIndex];
+    const basePrice = parseFloat(selectedOpt?.dataset?.basePrice || 0);
+    const multiplier = parseFloat(packSelect?.value || 1);
+
+    const calculatedUnitPrice = Math.round(basePrice * multiplier);
+    if (totalDisplay) {
+        totalDisplay.innerText = "₦" + (calculatedUnitPrice * currentQty).toLocaleString();
+    }
+}
+
+// Quantity adjustment
 function updateQty(change) {
     currentQty = Math.max(1, currentQty + change);
     const qtyDisplay = document.getElementById('qty-display');
     if (qtyDisplay) qtyDisplay.innerText = currentQty;
+    updateEstimatedPrice();
 }
 
-
+// Add item to cart
 function addToCart() {
     const flavorSelect = document.getElementById('flavor-select');
     const packSelect = document.getElementById('pack-size');
 
     if (!flavorSelect || flavorSelect.options.length === 0) {
-        alert('Please wait for product items to load or select a valid item.');
+        alert('Please wait for product items to load.');
         return;
     }
 
     const selectedFlavorOpt = flavorSelect.options[flavorSelect.selectedIndex];
     const flavor = selectedFlavorOpt.value;
-    
-    
-    const dbBasePrice = parseFloat(selectedFlavorOpt.dataset.basePrice);
-    const packPrice = parseInt(packSelect.value, 10);
-    const unitPrice = !isNaN(dbBasePrice) ? dbBasePrice : packPrice;
+    const basePrice = parseFloat(selectedFlavorOpt.dataset.basePrice || 0);
+    const multiplier = parseFloat(packSelect.value || 1);
 
+    const unitPrice = Math.round(basePrice * multiplier);
     const sizeLabel = packSelect.options[packSelect.selectedIndex].getAttribute('data-size') || "Standard";
 
     const existingIndex = cart.findIndex(item => item.flavor === flavor && item.sizeLabel === sizeLabel);
@@ -122,13 +137,13 @@ function addToCart() {
     renderCart();
 }
 
-
+// Remove item from cart
 function removeFromCart(index) {
     cart.splice(index, 1);
     renderCart();
 }
 
-
+// Render Cart items & Grand Total
 function renderCart() {
     const cartContainer = document.getElementById('cart-container');
     const cartList = document.getElementById('cart-list');
@@ -138,7 +153,7 @@ function renderCart() {
 
     if (cart.length === 0) {
         cartContainer.style.display = 'none';
-        totalDisplay.innerText = '₦0';
+        updateEstimatedPrice();
         return;
     }
 
@@ -165,7 +180,7 @@ function renderCart() {
     totalDisplay.innerText = '₦' + grandTotal.toLocaleString();
 }
 
-
+// Send WhatsApp Order
 function sendWhatsAppOrder() {
     if (cart.length === 0) {
         alert('Please add at least one item to your cart before ordering.');
@@ -183,21 +198,4 @@ function sendWhatsAppOrder() {
     const whatsappNumber = '2348083735003'; 
 
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
-}
-
-
-function filterFlavors(category, clickedBtn) {
-    const cards = document.querySelectorAll('.flavor-card');
-    const buttons = document.querySelectorAll('.tab-btn');
-
-    buttons.forEach(btn => btn.classList.remove('active'));
-    if (clickedBtn) clickedBtn.classList.add('active');
-
-    cards.forEach(card => {
-        if (category === 'all' || card.classList.contains(category)) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
 }
