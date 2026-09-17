@@ -5,41 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SceeBite Admin Dashboard</title>
     <style>
-        body 
-        {    font-family: Arial, sans-serif;
-             padding: 20px; 
-             background: #f4f4f9; 
-             color: #333; 
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body 
+        {   font-family: Arial, sans-serif;
+            padding: 12px; 
+            background: #f4f4f9; 
+            color: #333; 
+        }
+
+        @media (min-width: 640px) {
+            body {
+                padding: 20px;
+            }
+        }
+
         .container 
         {
              max-width: 1100px;
-              margin: auto; 
-              background: white; 
-              padding: 25px; 
-              border-radius: 8px; 
-              box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+             margin: auto; 
+             background: white; 
+             padding: 15px; 
+             border-radius: 8px; 
+             box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                padding: 25px;
+            }
         }
 
         h2, h3 
         { color: #1e293b; 
             margin-top: 0; 
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+        }
+
+        @media (min-width: 640px) {
+            h2 {
+                font-size: 1.875rem;
+            }
         }
 
         .form-card 
         { background: #f8fafc; 
-            padding: 20px; 
+            padding: 15px; 
             border-radius: 6px; 
             margin-bottom: 25px; 
             border: 1px solid #e2e8f0; 
         }
 
+        @media (min-width: 640px) {
+            .form-card {
+                padding: 20px;
+            }
+        }
+
         .form-grid
          { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            grid-template-columns: 1fr; 
             gap: 12px; 
-            margin-top: 10px; 
+        }
+
+        @media (min-width: 500px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 850px) {
+            .form-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
 
         input, select {
@@ -48,25 +96,100 @@
              border: 1px solid #cbd5e1; 
              border-radius: 4px; 
              box-sizing: border-box;
-             }
+             font-size: 14px;
+        }
 
+        /* ----------------------------------------------------
+           RESPONSIVE TABLE TO CARDS CONVERSION (Mobile-First)
+           ---------------------------------------------------- */
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 15px; 
         }
 
-        th, td
-         {
-             padding: 12px; 
-             border-bottom: 1px solid #e2e8f0; 
-             text-align: left; 
-             vertical-align: middle; 
-         }
-        th 
-        { background: #f1f5f9; 
-            font-weight: 600;
-         }
+        /* On mobile: Hide traditional header */
+        @media (max-width: 639px) {
+            table thead {
+                display: none;
+            }
+
+            /* Convert table rows to self-contained cards */
+            table, tbody, tr, td {
+                display: block;
+                width: 100%;
+            }
+
+            tr {
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                padding: 12px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+
+            td {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 8px 0;
+                border-bottom: 1px solid #f1f5f9;
+                text-align: left;
+            }
+
+            td:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            /* Add labels before inputs dynamically on mobile */
+            td::before {
+                content: attr(data-label);
+                font-size: 12px;
+                font-weight: bold;
+                color: #64748b;
+                margin-bottom: 4px;
+                text-transform: uppercase;
+            }
+
+            .img-preview {
+                width: 60px;
+                height: 60px;
+            }
+
+            .action-buttons {
+                display: flex;
+                width: 100%;
+                gap: 8px;
+                margin-top: 8px;
+            }
+
+            .action-buttons .btn {
+                flex: 1;
+            }
+        }
+
+        /* Desktop standard table layout */
+        @media (min-width: 640px) {
+            th, td {
+                padding: 12px; 
+                border-bottom: 1px solid #e2e8f0; 
+                text-align: left; 
+                vertical-align: middle; 
+            }
+
+            th { 
+                background: #f1f5f9; 
+                font-weight: 600;
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 5px;
+            }
+        }
+
         .img-preview 
         { width: 50px; 
             height: 50px; 
@@ -74,6 +197,7 @@
             border-radius: 4px; 
             border: 1px solid #ddd; 
         }
+
         .btn 
         { 
             border: none; 
@@ -82,26 +206,33 @@
             cursor: pointer;
             color: white; 
             font-weight: bold; 
+            font-size: 14px;
+            text-align: center;
         }
+
         .btn-add 
         { background: #2563eb; 
             width: 100%; 
             margin-top: 12px; 
         }
+
         .btn-add:hover 
         { background: #1d4ed8; 
         }
+
         .btn-save 
         { background: #059669;
          }
+
         .btn-save:hover
          { 
             background: #047857; 
         }
+
         .btn-delete 
         { 
             background: #dc2626; 
-            margin-left: 5px; }
+        }
 
         .btn-delete:hover { 
             background: #b91c1c;
@@ -119,8 +250,8 @@
     <div class="container">
         <h2>SceeBite Menu Management Dashboard</h2>
 
-        <!-- ADD NEW PRODUCT FORM -->
-        <div class="form-card">
+        
+        <section class="form-card">
             <h3>Add New Snack Item</h3>
             <form id="add-product-form" onsubmit="handleAddProduct(event)">
                 <div class="form-grid">
@@ -147,7 +278,7 @@
                 </div>
                 <button type="submit" class="btn btn-add">+ Add Item to Menu</button>
             </form>
-        </div>
+        </section>
 
     
         <table>
@@ -162,7 +293,7 @@
                 </tr>
             </thead>
             <tbody id="product-list">
-                <!-- Products loaded dynamically -->
+                
             </tbody>
         </table>
     </div>
@@ -184,24 +315,26 @@
                 products.forEach(p => {
                     tbody.innerHTML += `
                         <tr>
-                            <td>
+                            <td data-label="Preview">
                                 <img src="${p.image_url}" class="img-preview" alt="${p.name}" onerror="this.src='https://via.placeholder.com/50?text=No+Img'">
                             </td>
-                            <td><input type="text" id="name-${p.id}" value="${p.name}"></td>
-                            <td>
+                            <td data-label="Item Name"><input type="text" id="name-${p.id}" value="${p.name}"></td>
+                            <td data-label="Category">
                                 <select id="cat-${p.id}">
-                                    <option value="sweet" ${p.category === 'sweet' ? 'selected' : ''}>sweet</option>
-                                    <option value="spicy" ${p.category === 'spicy' ? 'selected' : ''}>spicy</option>
-                                    <option value="savory" ${p.category === 'savory' ? 'selected' : ''}>savory</option>
+                                 <option value="sweet" ${p.category === 'sweet' ? 'selected' : ''}>sweet</option>
+                                 <option value="spicy" ${p.category === 'spicy' ? 'selected' : ''}>spicy</option>
+                                 <option value="savory" ${p.category === 'savory' ? 'selected' : ''}>savory</option>
                                 </select>
                             </td>
-                            <td><input type="number" id="price-${p.id}" value="${p.price}"></td>
-                            <td>
+                            <td data-label="Price (₦)"><input type="number" id="price-${p.id}" value="${p.price}"></td>
+                            <td data-label="Replace Image">
                                 <input type="file" id="img-file-${p.id}" accept="image/*">
                             </td>
-                            <td>
-                                <button class="btn btn-save" onclick="updateProduct(${p.id}, '${p.image_url}')">Save</button>
-                                <button class="btn btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
+                            <td data-label="Actions">
+                                <div class="action-buttons">
+                                    <button class="btn btn-save" onclick="updateProduct(${p.id}, '${p.image_url}')">Save</button>
+                                    <button class="btn btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -211,7 +344,6 @@
             }
         }
 
-        // Add product with image upload
         async function handleAddProduct(e) {
             e.preventDefault();
             
@@ -238,7 +370,6 @@
             }
         }
 
-        // Update product details or upload a replacement image
         async function updateProduct(id, currentImageUrl) {
             const formData = new FormData();
             formData.append('name', document.getElementById(`name-${id}`).value);
@@ -268,7 +399,6 @@
             }
         }
 
-        // Delete product item
         async function deleteProduct(id) {
             if (confirm('Are you sure you want to remove this item from the database?')) {
                 try {
