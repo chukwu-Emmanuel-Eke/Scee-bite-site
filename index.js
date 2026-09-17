@@ -1,4 +1,3 @@
-  // Navigation Toggle
 const ham = document.querySelector('.ham');
 const links = document.querySelector('.nav-links');
 
@@ -75,11 +74,18 @@ async function loadDatabaseProducts() {
 
 // Recalculate preview total based on Database Base Price * Pack Multiplier * Qty
 function updateEstimatedPrice() {
-    const flavorSelect = document.getElementById("flavor-select");
-    const packSelect = document.getElementById("pack-size");
     const totalDisplay = document.getElementById("total-amount");
 
-    if (!flavorSelect || flavorSelect.options.length === 0 || cart.length > 0) return;
+    // Keep Grand Total at ₦0 if no items are added to the cart
+    if (cart.length === 0) {
+        if (totalDisplay) totalDisplay.innerText = "₦0";
+        return;
+    }
+
+    const flavorSelect = document.getElementById("flavor-select");
+    const packSelect = document.getElementById("pack-size");
+
+    if (!flavorSelect || flavorSelect.options.length === 0) return;
 
     const selectedOpt = flavorSelect.options[flavorSelect.selectedIndex];
     const basePrice = parseFloat(selectedOpt?.dataset?.basePrice || 0);
@@ -153,7 +159,7 @@ function renderCart() {
 
     if (cart.length === 0) {
         cartContainer.style.display = 'none';
-        updateEstimatedPrice();
+        totalDisplay.innerText = '₦0';
         return;
     }
 
